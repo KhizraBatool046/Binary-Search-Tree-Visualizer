@@ -1,0 +1,229 @@
+//class structure
+class BST {  //encapsulates all BST functions
+
+    class Node {   //represent single node
+        int data; //value of node
+        Node left, right; //left = pointer of left node , right = pointer of right node
+
+        public Node(int value) { //initializes new node
+            data = value;
+            left = right = null;
+        }
+    }
+
+    private Node root; //starting point of BST
+    //cnstructor
+    public BST() {
+        root = null;
+    }
+
+    //insertion method in BST
+    public void insert(int value) {
+        root = insertRecursive(root, value);
+    }
+
+    // according to BST Smaller values go left, larger values go right.
+    //  inserting value according to the properties of BST
+    // recursive insertion
+    private Node insertRecursive(Node root, int value) {
+        if (root == null) { // in both case if root is equal to null than it will create a new node
+            return new Node(value);
+        }
+        if (value < root.data) { // in this case if value is less than root than data will be inserted in left node
+            root.left = insertRecursive(root.left, value);
+        } else if (value > root.data) { // in this case if value is greater than data than it will be inserted in right node
+            root.right = insertRecursive(root.right, value);
+        }
+        return root;
+    }
+
+    //searching method in BST
+    public boolean search(int value) {
+        return searchRecursive(root, value);
+    }
+
+    //recursive searching
+    private boolean searchRecursive(Node root, int value) {
+        if (root == null) {
+            return false; // value not found
+        } if (root.data == value) {
+            return true; //value found
+        }
+        // if still not found than we will search it in left or rifht sub tree based on the value
+        return value < root.data ? searchRecursive(root.left, value) : searchRecursive(root.right, value);
+    }
+
+    // deletion method in BST
+    private void delete(int value) {
+        root = deleteRecursive(root, value); // calling  a recursive function to remove a node
+    }
+
+    //recursive deletion
+    private Node deleteRecursive(Node root, int value) {
+        if (root == null) { // value not found
+            return null;
+        }
+        if (value < root.data) {
+            root.left = deleteRecursive(root.left, value);
+        } else if (value > root.data) {
+            root.right = deleteRecursive(root.right, value);
+        } else {
+            // case1 no child or 1 child
+            if (root.left == null) return root.right; // node has no children delete it
+            else if (root.right == null) return root.left; // node has 1 child replace it with child
+
+            // case2 2 children
+            root.data = findMin(root.right); //first find the smallest in subtree
+            root.right = deleteRecursive(root.right, root.data); //delete it
+        }
+        return root;
+    }
+
+    //finding smallest value for deleteion
+    private int findMin(Node root) {
+        int minvalue = root.data;
+        while (root.left != null) {
+            minvalue = root.left.data;
+            root = root.left;
+        }
+        return minvalue;
+    }
+
+ //calling recusrsive function to sort the data in preorder traversal
+    private void preorder() {
+        preorderRecursive(root);
+        System.out.println();
+    }
+
+    //recursive preorder traversal
+    // preorder travels root left right
+    private void preorderRecursive(Node root) {
+        if (root!= null){
+            System.out.println(root.data + " ");
+             preorderRecursive(root.left);
+            preorderRecursive(root.right);
+        }
+    }
+    
+    //calling recusrsive function to sort the data in inorder traversal
+    private void inorder() {
+        inorderRecursive(root);
+        System.out.println();
+    }
+
+    //recursive inorder traversal
+    // inorder travels left root right
+    private void inorderRecursive(Node root) {
+        if (root != null) {
+            inorderRecursive(root.left);
+            System.out.println(root.data + " ");
+            inorderRecursive(root.right);
+        }
+    }
+    
+   
+    //calling recusrsive function to sort the data in postorder traversal
+    private void postorder() {
+        postorderRecursive(root);
+        System.out.println();
+    }
+
+    //recursive postorder traversal
+    // inorder travels left right root
+    private void postorderRecursive(Node root) {
+        if (root!= null) {
+            postorderRecursive(root.left);
+            postorderRecursive(root.right);
+            System.out.println(root.data + " ");
+        }
+    }
+
+    //main method of BST
+        public static void  main (String[]args){
+        BST tree =new BST();//object of BST
+        //insert node
+        tree.insert(50);
+        tree.insert(40);
+        tree.insert(35);
+        tree.insert(75);
+        tree.insert(60);
+        tree.insert(80);
+
+    //preorder traversal after insertion
+       System.out.println("Preorder traversal after inserting nodes:");
+        tree.preorder();//print 50 , 40 , 35 , 75 ,60 ,80
+        
+    //inorder traversal after insertion
+        System.out.println("Inorder traversal after inserting nodes:");
+        tree.inorder();//print 80 , 75 , 60 , 50 , 40 , 35
+        
+    //postorder traversal after insertion
+        System.out.println("Postorder traversal after inserting nodes:");
+        tree.postorder();//35 , 40 , 60 , 80 , 75 , 50
+        
+        //searching
+        System.out.println("search 35: " + tree.search(35));//true
+        System.out.println("search 25: " + tree.search(25));//false
+
+        //delete node
+        tree.delete(40);
+        //print updated BSt
+        System.out.println("Preorder traversal after deleting 40:");
+        tree.preorder();
+        System.out.println("Inorder traversal after deleting 40:");
+        tree.inorder();
+        System.out.println("Postorder traversal after deleting 40:");
+        tree.postorder();
+        try {
+    tree.insert(50);
+    tree.insert(40);
+    tree.insert(35);
+    tree.insert(75);
+    tree.insert(60);
+    tree.insert(80);
+} catch (Exception e) {
+    System.out.println("Insertion Error: " + e.getMessage());
+}
+
+try {
+    System.out.println("Preorder traversal after inserting nodes:");
+    tree.preorder();
+} catch (Exception e) {
+    System.out.println("Preorder Traversal Error: " + e.getMessage());
+}
+
+try {
+    System.out.println("Inorder traversal after inserting nodes:");
+    tree.inorder();
+} catch (Exception e) {
+    System.out.println("Inorder Traversal Error: " + e.getMessage());
+}
+
+try {
+    System.out.println("Postorder traversal after inserting nodes:");
+    tree.postorder();
+} catch (Exception e) {
+    System.out.println("Postorder Traversal Error: " + e.getMessage());
+}
+
+try {
+    System.out.println("Search 35: " + tree.search(35));
+    System.out.println("Search 25: " + tree.search(25));
+} catch (Exception e) {
+    System.out.println("Search Error: " + e.getMessage());
+}
+
+try {
+    tree.delete(40);
+    System.out.println("Preorder traversal after deleting 40:");
+    tree.preorder();
+    System.out.println("Inorder traversal after deleting 40:");
+    tree.inorder();
+    System.out.println("Postorder traversal after deleting 40:");
+    tree.postorder();
+} catch (Exception e) {
+    System.out.println("Deletion Error: " + e.getMessage());
+}
+
+    }
+}
