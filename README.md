@@ -16,7 +16,7 @@ The project demonstrates the implementation of BST operations and helps in under
 * Inorder Traversal
 * Preorder Traversal
 * Postorder Traversal
-* Binary Search Tree visualization (if implemented)
+* Binary Search Tree visualization 
 
 ---
 
